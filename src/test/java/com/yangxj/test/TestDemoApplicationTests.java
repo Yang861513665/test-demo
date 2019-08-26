@@ -1,14 +1,14 @@
 package com.yangxj.test;
 
-import com.yangxj.test.utils.HtmlUtils;
+import com.yangxj.test.utils.PDFUtil;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -74,8 +74,10 @@ public class TestDemoApplicationTests {
         fileOutputStream.close();
     }
     @Test
-    public void test(){
-        HtmlUtils.HtmlCovertPdf("/Users/edz/test.html","/Users/edz/test.pdf");
+    public void testHtml2Pdf() throws Exception {
+        FileOutputStream fileOutputStream = new FileOutputStream("/Users/edz/test.pdf");
+        ClassPathResource resource = new ClassPathResource("/templates/test.html");
+        PDFUtil.writeToOutputStreamAsPDF(resource.getInputStream(),fileOutputStream);
     }
 
 }
