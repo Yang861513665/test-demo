@@ -16,18 +16,24 @@ import java.util.Date;
 public class DataBaseTemplateLoader implements TemplateLoader {
     @Override
     public Object findTemplateSource(String name) throws IOException {
-        // 模拟从数据库中获取ftl内容
-        String content = "<!DOCTYPE html>\n" +
-                "<html lang=\"en\">\n" +
-                "<head>\n" +
-                "    <meta charset=\"UTF-8\">\n" +
-                "    <title>Title</title>\n" +
-                "</head>\n" +
-                "<body>\n" +
-                "   ${name} !!\n" +
-                "</body>\n" +
-                "</html>";
-        return new StringTemplateSource(name,content,new Date().getTime());
+        System.out.println("template name:" + name);
+        if(!name.startsWith("index2")){
+            // 模拟从数据库中获取ftl内容
+            String content = "<!DOCTYPE html>\n" +
+                    "<html lang=\"en\">\n" +
+                    "<head>\n" +
+                    "    <meta charset=\"UTF-8\">\n" +
+                    "    <title>Title</title>\n" +
+                    "</head>\n" +
+                    "<body>\n" +
+                    "   ${name} !!\n" +
+                    "</body>\n" +
+                    "</html>";
+            return new StringTemplateSource(name,content,new Date().getTime());
+        }else{
+            return null;
+        }
+
     }
 
     @Override

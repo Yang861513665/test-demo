@@ -1,22 +1,31 @@
 package com.yangxj.test;
 
 import com.yangxj.test.utils.PDFUtil;
+import freemarker.cache.TemplateLoader;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.FileOutputStream;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TestDemoApplicationTests {
+    @Autowired
+    Configuration configuration;
 
     @Test
     public void contextLoads() throws Exception {
@@ -75,9 +84,29 @@ public class TestDemoApplicationTests {
     }
     @Test
     public void testHtml2Pdf() throws Exception {
-        FileOutputStream fileOutputStream = new FileOutputStream("/Users/edz/test.pdf");
-        ClassPathResource resource = new ClassPathResource("/templates/test.html");
+        FileOutputStream fileOutputStream = new FileOutputStream("index.pdf");
+        ClassPathResource resource = new ClassPathResource("/templates/index2.html");
         PDFUtil.writeToOutputStreamAsPDF(resource.getInputStream(),fileOutputStream);
+    }
+    @Test
+    public void test() throws IOException, TemplateException {
+        Template template = configuration.getTemplate("index2.ftl");
+        HashMap<String, String> date = new HashMap<>();
+        date.put("name","yangxj");
+        File file = new File("index2.html");
+        // Writer out = new FileWriter(file);
+        Writer out = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(file), "utf-8"));
+        template.process(date, out);
+        out.flush();
+        out.close();
+        FileInputStream fileInputStream = new FileInputStream(file);
+        FileOutputStream fileOutputStream = new FileOutputStream("index.pdf");
+        PDFUtil.writeToOutputStreamAsPDF(fileInputStream,fileOutputStream);
+        fileInputStream.close();
+        fileOutputStream.close();
+        boolean delete = file.delete();
+        System.out.println(delete);
     }
 
 }

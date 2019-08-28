@@ -15,6 +15,7 @@ public class CompentConfig {
         FreeMarkerConfigurer freeMarkerConfigurer = new FreeMarkerConfigurer();
         // 加入自定义 templateLoader
         freeMarkerConfigurer.setPostTemplateLoaders(dataBaseTemplateLoader);
+        freeMarkerConfigurer.setTemplateLoaderPath("classpath:/templates/");
         return freeMarkerConfigurer;
     }
 }
